@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sugarcube Corner 🍰</title>
+    <style>
+        /* Reset básico */
+        *{box-sizing: border-box;}
+        body {
+            background-color:#ffb3d9;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            color: brown;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        header {
+            background-color:#f764bc;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #d147a3;
+            flex-wrap: wrap;
+        }
+
+        header h1 {
+            color: #d147a3;
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: brown;
+            font-weight: bold;
+            margin: 0 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        nav a:hover {
+            color: #d63384;
+        }
+
+        .iconos {
+            font-size: 18px;
+        }
+
+        main{padding: 16px 8px;}
+
+        .producto {
+            background-color: rgb(252, 139, 223);
+            width: 90%;
+            max-width: 700px;
+            margin: 16px auto;
+            padding: 15px;
+            border-radius: 15px;
+            position: relative;
+            text-align: left;
+        }
+
+        .producto h2{margin:0 0 8px 0; font-size:1.05rem}
+
+        .producto img {
+            width: 100%;
+            max-width: 260px;
+            height: auto;
+            border-radius: 10px;
+            display: block;
+            margin: 8px 0;
+        }
+
+        .precio {
+            color: #d63384;
+            font-weight: bold;
+        }
+
+        .oferta {
+            background-color: #ffccdd;
+            color: #b30047;
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        footer {
+            margin-top: 20px;
+            background-color: #ffb3d9;
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        #buscar {
+            margin: 18px auto;
+            width: 90%;
+            max-width: 720px;
+            background-color: #ffd6eb;
+            padding: 12px;
+            border-radius: 15px;
+            text-align: left;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #d147a3;
+            width: 65%;
+            max-width: 420px;
+        }
+
+        button {
+            background-color: #d147a3;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        button:hover {background-color: #b3006b}
+
+        .add-cart {
+            position: absolute;
+            right: 12px;
+            top: 12px;
+            background-color: #d63384;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        #carritoVentana {
+            display: none;
+            position: fixed;
+            top: 80px;
+            right: 12px;
+            background-color: white;
+            border: 2px solid #d147a3;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 320px;
+            padding: 12px;
+            text-align: left;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            z-index: 999;
+        }
+
+        #carritoVentana h3 {text-align:center; color:#d147a3}
+        #carritoLista p{margin:6px 0; font-weight:bold}
+        #cerrarCarrito{display:block;margin:10px auto;background-color:#d147a3;color:white;border:none;padding:6px 10px;border-radius:8px}
+
+        /* Media queries para pantallas pequeñas */
+        @media (max-width: 600px){
+            header{padding:8px}
+            nav{margin-top:8px}
+            .producto{padding:12px}
+            input[type="text"]{width:100%; margin-bottom:8px}
+            #buscar{padding:10px}
+            .producto img{max-width:100%}
+        }
+
+    </style>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header>
+        <h1>Sugarcube Corner 🍰</h1>
+        <nav aria-label="Menú principal">
+            <a href="#inicio" id="botonInicio"><i class="fas fa-home iconos" aria-hidden="true"></i> Inicio</a>
+            <a href="#buscar"><i class="fas fa-search iconos" aria-hidden="true"></i> Buscar</a>
+            <a id="abrirCarrito" role="button" aria-pressed="false"><i class="fas fa-shopping-cart iconos" aria-hidden="true"></i> Carrito (<span id="cantidadCarrito">0</span>)</a>
+            <a href="#contacto"><i class="fas fa-envelope iconos" aria-hidden="true"></i> Contacto</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="inicio">
+            <h2>¡Endulza tu día con el mejor sabor casero!</h2>
+            <p>Hechos a mano con amor y el toque especial de Sugarcube Corner 💕</p>
+        </section>
+
+        <section id="buscar">
+            <h2>Busca tu postre favorito 🍭</h2>
+            <input type="text" id="campoBusqueda" placeholder="Escribe aquí (ejemplo: brownies, flan...)">
+            <button id="botonBuscar">Buscar</button>
+        </section>
+
+        <section id="productos">
+            <div class="producto" data-nombre="rollitos de canela">
+                <button class="add-cart" aria-label="Agregar Rollitos de canela">🛒</button>
+                <h2>Rollitos de canela 🍥</h2>
+                <img src="c:\Users\Windows\Downloads\descarga (3).jpg" alt="Rollitos de canela" />
+                <p class="precio">RD$100 (6 unidades)</p>
+                <div class="oferta">¡2x1 los fines de semana!</div>
+                <p>Suaves, esponjosos y con ese toque dulce que alegra el alma.</p>
+            </div>
+
+            <div class="producto" data-nombre="rollitos con glaseado pinkie">
+                <button class="add-cart" aria-label="Agregar Rollitos pinkie">🛒</button>
+                <h2>Rollitos con glaseado pinkie 💖</h2>
+                <img src="c:\Users\Windows\Downloads\Pink Velvet Cinnamon Rolls.jpg" alt="Rollitos rosados" />
+                <p class="precio">RD$180 (6 unidades)</p>
+                <div class="oferta">¡10% de descuento esta semana!</div>
+                <p>Tiernos, dulces y con ese toque rosado que enamora 😍.</p>
+            </div>
+
+            <div class="producto" data-nombre="cupcakes">
+                <button class="add-cart" aria-label="Agregar Cupcakes">🛒</button>
+                <h2>Cupcakes de vainilla 🧁</h2>
+                <img src="c:\Users\Windows\Downloads\descarga (4).jpg" alt="Cupcakes" />
+                <p class="precio">RD$200 (6 unidades)</p>
+                <p>Decorados con crema suave y colorida, ¡perfectos para cualquier ocasión!</p>
+            </div>
+
+            <div class="producto" data-nombre="brownies">
+                <button class="add-cart" aria-label="Agregar Brownies">🛒</button>
+                <h2>Brownies de chocolate 🍫</h2>
+                <img src="c:\Users\Windows\Downloads\descarga (2).jpg" alt="Brownies" />
+                <p class="precio">RD$45 (4 unidades)</p>
+                <p>Jugosos, con trocitos de chocolate derretido que se deshacen en la boca.</p>
+            </div>
+
+            <div class="producto" data-nombre="galletas">
+                <button class="add-cart" aria-label="Agregar Galletas">🛒</button>
+                <h2>Galletas artesanales 🍪</h2>
+                <img src="c:\Users\Windows\Downloads\a.jpg" alt="Galletas" />
+                <p class="precio">RD$120 (6 unidades)</p>
+                <p>Crujientes, dulces y con chispas de amor (y chocolate 😋).</p>
+            </div>
+
+            <div class="producto" data-nombre="flan">
+                <button class="add-cart" aria-label="Agregar Flan">🛒</button>
+                <h2>Flan casero 🍮</h2>
+                <img src="c:\Users\Windows\Downloads\r i s.jpg" alt="Flan" />
+                <p class="precio">RD$100 por porción</p>
+                <p>Suave, cremoso y con un caramelo que te hace suspirar.</p>
+            </div>
+
+            <div class="producto" data-nombre="cakepops">
+                <button class="add-cart" aria-label="Agregar Cakepops">🛒</button>
+                <h2>Cakepops divertidos 🎂</h2>
+                <img src="c:\Users\Windows\Downloads\Cake Pops.jpg" alt="Cakepops" />
+                <p class="precio">RD$25 c/u</p>
+                <p>Mini pastelitos en palito, cubiertos de chocolate y mucha alegría.</p>
+            </div>
+
+            <div class="producto" data-nombre="churros">
+                <button class="add-cart" aria-label="Agregar Churros">🛒</button>
+                <h2>Churros rellenos 😍</h2>
+                <img src="c:\Users\Windows\Downloads\descarga (8).jpg" alt="Churros" />
+                <p class="precio">RD$150 (5 unidades)</p>
+                <p>Rellenos de dulce de leche o chocolate, calientitos y crujientes.</p>
+            </div>
+        </section>
+    </main>
+
+    <div id="carritoVentana" aria-hidden="true">
+        <h3>🛍️ Tu carrito</h3>
+        <div id="carritoLista"></div>
+        <button id="cerrarCarrito">Cerrar</button>
+    </div>
+
+    <footer id="contacto">
+        <p>Hecho en República Dominicana 💕</p>
+        <p>WhatsApp: 809-000-0000 | Instagram: @sugarcube.corner</p>
+    </footer>
+
+    <script>
+        const botonesAgregar = document.querySelectorAll(".add-cart");
+        const carritoVentana = document.getElementById("carritoVentana");
+        const carritoLista = document.getElementById("carritoLista");
+        const abrirCarrito = document.getElementById("abrirCarrito");
+        const cerrarCarrito = document.getElementById("cerrarCarrito");
+        const cantidadCarrito = document.getElementById("cantidadCarrito");
+        const campoBusqueda = document.getElementById("campoBusqueda");
+        const botonBuscar = document.getElementById("botonBuscar");
+        const productos = document.querySelectorAll(".producto");
+        const botonInicio = document.getElementById("botonInicio");
+
+        let carrito = [];
+
+        botonesAgregar.forEach(boton => {
+            boton.addEventListener("click", (e) => {
+                const producto = e.target.parentElement.querySelector("h2").textContent;
+                carrito.push(producto);
+                cantidadCarrito.textContent = carrito.length;
+                alert(producto + " agregado al carrito 🛒");
+            });
+        });
+
+        abrirCarrito.addEventListener("click", () => {
+            carritoVentana.style.display = "block";
+            carritoVentana.setAttribute('aria-hidden', 'false');
+            carritoLista.innerHTML = "";
+            if (carrito.length === 0) {
+                carritoLista.innerHTML = "<p>Tu carrito está vacío 😢</p>";
+            } else {
+                carrito.forEach(item => {
+                    const p = document.createElement("p");
+                    p.textContent = "• " + item;
+                    carritoLista.appendChild(p);
+                });
+            }
+        });
+
+        cerrarCarrito.addEventListener("click", () => {
+            carritoVentana.style.display = "none";
+            carritoVentana.setAttribute('aria-hidden', 'true');
+        });
+
+        botonBuscar.addEventListener("click", () => {
+            const texto = campoBusqueda.value.toLowerCase();
+            productos.forEach(p => {
+                const nombre = p.dataset.nombre.toLowerCase();
+                if (nombre.includes(texto) || texto === "") {
+                    p.style.display = "block";
+                } else {
+                    p.style.display = "none";
+                }
+            });
+        });
+
+        botonInicio.addEventListener("click", () => {
+            productos.forEach(p => p.style.display = "block");
+        });
+    </script>
+</body>
+</html>
